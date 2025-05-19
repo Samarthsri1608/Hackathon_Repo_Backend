@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
-import fitz  # PyMuPDF
+import pdfplumber
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import json
@@ -24,7 +24,7 @@ with open(Path(__file__).parent / "skills.json", "r") as f:
 
 def extract_text_from_pdf(uploaded_file):
     contents = uploaded_file.file.read()
-    with fitz.open(stream=contents, filetype="pdf") as doc:
+    with pdfplumber.open(stream=contents, filetype="pdf") as doc:
         text = "\n".join([page.get_text() for page in doc])
     return text
 
